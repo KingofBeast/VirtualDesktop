@@ -32,12 +32,12 @@ namespace WindowsDesktop
 		{
 			if (this._initializationTask == null)
 			{
-				this._initializationTask = Task.Run(() => Core());
+				this._initializationTask = ApplicationHelper.StartSTATask(Core);
 
 				if (this.AutoRestart && scheduler != null)
 				{
 					this._initializationTask.ContinueWith(
-						_ => this.ComObjects.Listen(),
+						_ => ApplicationHelper.StartSTATask(this.ComObjects.Listen),
 						CancellationToken.None,
 						TaskContinuationOptions.OnlyOnRanToCompletion,
 						scheduler);
